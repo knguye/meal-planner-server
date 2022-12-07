@@ -95,6 +95,17 @@ const getAccessToken = async () => {
     });    
 }
 
+app.get('/health', function (req, res) {
+    try {
+        console.log("Monitoring health..");
+
+        res.sendStatus(200);
+    }
+    catch (error){
+        res.send(error);
+    }
+})
+
 app.post('/get_food/:id', function (req, res) {
     const id = req.params.id;
 
