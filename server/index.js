@@ -182,6 +182,53 @@ app.post('/find_recipe/:protein/:carbs/:fat/:calories', function (req, res) {
     }
 })
 
+app.get('/find_recipe/:protein/:carbs/:fat/:calories', function (req, res) {
+    const proteinPct = parseInt(req.params.protein);
+    const carbPct = parseInt(req.params.carbs);
+    const fatPct = parseInt(req.params.fat);
+    const calories = parseInt(req.params.calories);
+    const recipeType = req.params.recipeType;
+    console.log(`Cal: ${calories} \nP: ${proteinPct}  C: ${carbPct}  F: ${fatPct}`);
+    //console.log(`Searching with keyword(s): ${recipeType}`);
+    try{
+        let data = new URLSearchParams({
+            oauth_consumer_key: 'key',
+            oauth_signature_method: 'HMAC-SHA1',
+            oauth_nonce: 'nonce',
+            method: 'recipes.search.v2',
+            format: 'json',
+            //'calories.to': calories + 200,
+            'calories.from': calories-100,
+            'protein_percentage.from': proteinPct-5,
+            //'protein_percentage.to': proteinPct,
+            'carb_percentage.from': carbPct - 10,
+            //'carb_percentage.to': carbPct + 10,
+            'fat_percentage.from': fatPct - 10,
+            //'fat_percentage.to': fatPct + 10,
+            //search_expression: recipeType,
+            max_results: 50
+        })
+
+        fetch('https://platform.fatsecret.com/rest/server.api?' + data,
+        {
+            method: 'POST',
+            headers: {  'Content-Type': 'multipart/form-data',
+                        'Authorization': 'Bearer ' + accessToken,
+                        },
+        })
+        .then((response) => response.json())
+        .then((body) => {
+            console.log(body);
+            res.send(body)
+        });
+    }
+    catch (error) {
+        console.log(`error ${error}`)
+        res.send(error);
+    }
+})
+
+
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 })
