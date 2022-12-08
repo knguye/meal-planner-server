@@ -177,6 +177,7 @@ app.post('/find_recipe/:protein/:carbs/:fat/:calories', function (req, res) {
         });
     }
     catch (error) {
+        console.log(`error ${error}`)
         res.send(error);
     }
 })
