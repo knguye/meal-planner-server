@@ -216,9 +216,13 @@ app.get('/find_recipe/:protein/:carbs/:fat/:calories', function (req, res) {
                         'Authorization': 'Bearer ' + accessToken,
                         },
         })
-        .then((response) => response.json())
+        .then((response) => {
+            response.headers.append('Access-Control-Allow-Origin', '*');
+            response.json()
+        })
         .then((body) => {
             console.log(body);
+            const headers = new Headers();
             res.send(body)
         });
     }
