@@ -13,6 +13,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
+
 /*
 
 const myHeaders = new Headers();
